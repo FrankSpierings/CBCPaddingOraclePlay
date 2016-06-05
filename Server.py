@@ -1,6 +1,11 @@
-from Crypto.Cipher import AES
+import logging
+
 from Crypto import Random
+from Crypto.Cipher import AES
+
 from PKCS7 import PKCS7
+
+logger = logging.getLogger(__name__)
 
 class Server:
     __plain = '''We knew the world would not be the same. A few people laughed, a few people cried, most people were silent.
@@ -11,9 +16,9 @@ I suppose we all thought that one way or another.'''
         self._key = Random.new().read(AES.block_size)
         #self._iv  = Random.new().read(AES.block_size)
         self._iv  = "\x00" * AES.block_size
-        print "Server initialized:"
-        print "Key\t: %s" % self._key.encode('hex')
-        print "IV\t: %s" % self._iv.encode('hex')
+        logger.info("Server initialized:")
+        logger.debug("Key\t: %s" % self._key.encode('hex'))
+        logger.debug("IV\t: %s" % self._iv.encode('hex'))
 
     def __encrypt(self, message):
         cipher = AES.new(key=self._key, mode=AES.MODE_CBC, IV=self._iv)
